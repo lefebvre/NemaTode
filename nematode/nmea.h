@@ -18,11 +18,11 @@
 
 
 
-#include <nmeaparse/NMEAParser.h>
-#include <nmeaparse/NMEACommand.h>
-#include <nmeaparse/GPSService.h>
+#include <nematode/NMEAParser.h>
+#include <nematode/NMEACommand.h>
+#include <nematode/GPSService.h>
 
-#include <nmeaparse/NumberConversion.h>
+#include <nematode/NumberConversion.h>
 
 
 

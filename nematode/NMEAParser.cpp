@@ -7,8 +7,8 @@
  *  See the license file included with this source.
  */
 
-#include <nmeaparse/NMEAParser.h>
-#include <nmeaparse/NumberConversion.h>
+#include <nematode/NMEAParser.h>
+#include <nematode/NumberConversion.h>
 #include <sstream>
 #include <iostream>
 #include <algorithm>
@@ -40,7 +40,7 @@ std::string NMEAParseError::what(){
 
 // --------- NMEA SENTENCE --------------
 
-NMEASentence::NMEASentence() 
+NMEASentence::NMEASentence()
 : isvalid(false)
 , checksumIsCalculated(false)
 , calculatedChecksum(0)
@@ -108,13 +108,13 @@ void trim(string& str){
 
 
 
-NMEAParser::NMEAParser() 
+NMEAParser::NMEAParser()
 : log(false)
 , maxbuffersize(NMEA_PARSER_MAX_BUFFER_SIZE)
 , fillingbuffer(false)
 { }
 
-NMEAParser::~NMEAParser() 
+NMEAParser::~NMEAParser()
 { }
 
 
@@ -215,12 +215,12 @@ void NMEAParser::readSentence(std::string cmd){
 	NMEASentence nmea;
 
 	onInfo(nmea, "Processing NEW string...");
-	
+
 	if (cmd.size() == 0){
 		onWarning(nmea, "Blank string -- Skipped processing.");
 		return;
 	}
-	
+
 	// If there is a newline at the end (we are coming from the byte reader
 	if ( *(cmd.end()-1) == '\n'){
 		if (*(cmd.end() - 2) == '\r'){	// if there is a \r before the newline, remove it.
@@ -244,9 +244,9 @@ void NMEAParser::readSentence(std::string cmd){
 		onWarning(nmea, ss.str());
 	}
 
-	
+
 	onInfo(nmea, string("NMEA string: (\"") + cmd + "\")");
-	
+
 
 	// Seperates the data now that everything is formatted
 	try{
@@ -276,7 +276,7 @@ void NMEAParser::readSentence(std::string cmd){
 		onError(nmea, ss.str());
 		return;
 	}
-	
+
 
 	// Call the "any sentence" event handler, even if invalid checksum, for possible logging elsewhere.
 	onInfo(nmea, "Calling generic onSentence().");
@@ -377,7 +377,7 @@ void NMEAParser::parseText(NMEASentence& nmea, string txt){
 		else
 		{	//it is a '$' with no information
 			nmea.isvalid = false;
-			return;	
+			return;
 		}
 	}
 
@@ -389,7 +389,7 @@ void NMEAParser::parseText(NMEASentence& nmea, string txt){
 
 
 	//name should not include first comma
-	nmea.name = txt.substr(0, comma);	
+	nmea.name = txt.substr(0, comma);
 	if ( hasNonAlphaNum(nmea.name) ){
 		nmea.isvalid = false;
 		return;
@@ -397,10 +397,10 @@ void NMEAParser::parseText(NMEASentence& nmea, string txt){
 
 
 	//comma is the last character/only comma
-	if (comma + 1 == txt.size()){		
+	if (comma + 1 == txt.size()){
 		nmea.parameters.push_back("");
 		nmea.isvalid = true;
-		return;	
+		return;
 	}
 
 
@@ -463,9 +463,9 @@ void NMEAParser::parseText(NMEASentence& nmea, string txt){
 				{
 					onError(nmea, string("parseInt() error. Parsed checksum string was not readable as hex. (\"") +  nmea.checksum + "\")");
 				}
-				
+
 				onInfo(nmea, string("Checksum ok? ") + (nmea.checksumOK() ? "YES" : "NO") + "!");
-				
+
 
 			}
 		}

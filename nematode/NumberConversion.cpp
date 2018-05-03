@@ -7,7 +7,7 @@
  *  See the license file included with this source.
  */
 
-#include <nmeaparse/NumberConversion.h>
+#include <nematode/NumberConversion.h>
 #include <cstdlib>
 
 using namespace std;

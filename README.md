@@ -1,3 +1,52 @@
+# Requirements
+* Python 2.7 ( cloning subprojects )
+* Fortran compiler. gfortran 4.8 tested
+* C compiler. gcc 4.8 tested
+* Git
+* CMake. 2.8.12.2 tested.
+
+# Getting Started
+* Clone NemaTode
+`git clone https://github.com/lefebvre/NemaTode ~/NemaTode`
+* Change directory into NemaTode `cd ~/NemaTode
+* Clone TriBITS
+`git clone https://github.com/lefebvre/TriBITS.git TriBITS`
+* Clone all subprojects
+`./TriBITS/tribits/ci_support/clone_extra_repos.py`
+* Create a build directory
+`mkdir -p ~/build/NemaTode`
+* Change into the build `cd ~/build/NemaTode`
+* Create a configuration script in ~/build/. Lets call is ../configure.sh(linux), ..\configure.bat(windows)
+
+```
+#!/bin/bash
+# Linux bash file example
+rm -rf CMake*
+cmake \
+ -D CMAKE_BUILD_TYPE:STRING=RELEASE \
+ -D Tutela_ENABLE_ALL_PACKAGES:BOOL=ON \
+ -D Tutela_ENABLE_TESTS:BOOL=ON \
+ -G "Unix Makefiles" \
+ ~/NemaTode
+```
+```
+rem Windows MinGW bat file example
+del /S /Q CMake*
+cmake ^
+ -D CMAKE_BUILD_TYPE:STRING=RELEASE ^
+ -D Tutela_ENABLE_ALL_PACKAGES:BOOL=ON ^
+ -D Tutela_ENABLE_TESTS:BOOL=ON ^
+ -G "MinGW Makefiles" ^
+ ~/NemaTode
+```
+
+* Invoke configure script in the build directory.
+`../configure.sh or ..\configure.bat`
+  * I place the configure script in the build directory as opposed to the build/NemaTode directory because it allows me to delete the build/NemaTode
+directory without removing my script.
+
+# Updating all extra repositories
+`TriBITS/tribits/python_utils/gitdist.py <command>` will perform the `<command>` on each extra repo.
 # NemaTode
 
 *Cross platform C++ 11 NMEA Parser & GPS Framework*
@@ -11,7 +60,7 @@ Confirmed on MSVC 2013 and GCC 4.8.4.
 ## It's too easy!
 This is all you need to use the GPS NMEA sentence data.
 
-
+```c++
     NMEAParser parser;
     GPSService gps(parser);
     // (optional) Called when a sentence is valid syntax
@@ -33,12 +82,8 @@ This is all you need to use the GPS NMEA sentence data.
     } catch (NMEAParseError&) {
         // Syntax error, skip
     }
-    
+```
 
-    
-    
-
-      
 
 ----
 ##Features
@@ -46,7 +91,7 @@ This is all you need to use the GPS NMEA sentence data.
 * **NMEA Parsing** of standard and custom sentences.
 
   - Standard:
-```` 
+````
     GPGGA, GPGSA, GPGSV, GPRMC, GPVTG
 ````
 
@@ -61,17 +106,17 @@ This is all you need to use the GPS NMEA sentence data.
    - Read log files, even if they are cluttered with other unrelated data.
    - Easily hook into the parser to handle custom sentences and get their data.
    - Simplified GPS data
-    
+
 * **C++ 11 features**
    - Those fancy event handlers...
    - If you are on an embedded system... sorry. This might not work for you because of compiler restrictions. Make sure there is full support for lambdas and variadic templates. Tested GCC 4.8.4, confirmed.
 
 ## Details
 NMEA is very popular with GPS. Unfortunately the GPS data is fragmented
-between many different NMEA sentences. Sometimes there is even conflicting 
+between many different NMEA sentences. Sometimes there is even conflicting
 information in them!
 
-The underlying **NMEAParser** can read a byte stream from a hardware device or 
+The underlying **NMEAParser** can read a byte stream from a hardware device or
 it can read log files with flexibility in the formatting. The accepted strings are...
 
 ````
@@ -119,7 +164,7 @@ There are 2 ways to operate...
 .
 
 **Generation**
-    
+
     NMEACommand mycmd;
     mycmd.name = "MYCMD";
     mycmd.message = "your,data,csv";
@@ -147,7 +192,7 @@ All data is checked for consistency. For example, visible satellites can never b
 
     char 		status;		// Status: A=active, V=void (not locked)
     uint8_t 	type;		// Type: 1=none, 2=2d, 3=3d
-    uint8_t 	quality;	// Quality (1-6) 
+    uint8_t 	quality;	// Quality (1-6)
 
     double 		dilution;		// Combination of Vertical & Horizontal
     double 		horizontalDilution;	// Horizontal dilution of precision, initialized to 10, best =1, worst = >20
@@ -165,9 +210,9 @@ All data is checked for consistency. For example, visible satellites can never b
     double 		horizontalAccuracy();	// Gets accuracy of position in meters
     double 		verticalAccuracy();
     bool 		hasEstimate();		// If no fix is available, this says the position data is close to a real fix.
-		
+
     std::chrono::seconds timeSinceLastUpdate();	// Returns time from last timestamp to right now, in seconds.
-    
+
 
 **GPSSatellite**
 
@@ -180,22 +225,22 @@ All data is checked for consistency. For example, visible satellites can never b
 **GPSAlmanac**
 
     std::vector<GPSSatellite> satellites;	// mapped by prn (id number)
-    double 		averageSNR(); 
+    double 		averageSNR();
     double 		minSNR();
     double 		maxSNR();
     double 		percentComplete();	// if all the satellite information is loaded (0-100)
 
-		
+
 **GPSTimestamp**    *(UTC Time)*
 
     int32_t 	hour;		// Parsed values from GPS
-    int32_t 	min;		
-    double 		sec;		
-    int32_t 	month;		
-    int32_t 	day;		
-    int32_t 	year;		
+    int32_t 	min;
+    double 		sec;
+    int32_t 	month;
+    int32_t 	day;
+    int32_t 	year;
     double 		rawTime;	// Values collected directly from the GPS
-    int32_t 	rawDate;	
+    int32_t 	rawDate;
     time_t 		getTime();	// Converts timestamp into Epoch time, seconds since 1/1/1970.
 
 

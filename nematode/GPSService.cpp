@@ -8,8 +8,8 @@
  */
 
 
-#include <nmeaparse/GPSService.h>
-#include <nmeaparse/NumberConversion.h>
+#include <nematode/GPSService.h>
+#include <nematode/NumberConversion.h>
 
 #include <iostream>
 #include <cmath>
@@ -354,7 +354,7 @@ void GPSService::read_GPGSV(const NMEASentence& nmea){
 
 		this->fix.almanac.processedPages++;
 
-		// 
+		//
 		if (this->fix.visibleSatellites == 0){
 			this->fix.almanac.clear();
 		}

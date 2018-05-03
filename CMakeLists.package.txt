@@ -1,0 +1,31 @@
+TRIBITS_PACKAGE(nematode)
+SET(SOURCE
+nematode/GPSFix.cpp
+nematode/GPSService.cpp
+nematode/NMEACommand.cpp
+nematode/NMEAParser.cpp
+nematode/NumberConversion.cpp
+)
+
+SET(HEADERS
+nematode/Event.h
+nematode/GPSFix.h
+nematode/GPSService.h
+nematode/NMEACommand.h
+nematode/NMEAParser.h
+nematode/NumberConversion.h
+nematode/nmea.h
+)
+
+
+#
+# Create a library of nematode source
+TRIBITS_ADD_LIBRARY(nematode
+  SOURCES ${SOURCE}
+  NOINSTALLHEADERS ${HEADERS}
+)
+
+INSTALL(FILES ${HEADERS} DESTINATION "include/nematode")
+
+TRIBITS_ADD_TEST_DIRECTORIES(tests)
+TRIBITS_PACKAGE_POSTPROCESS()
