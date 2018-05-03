@@ -64,7 +64,9 @@ class GPSAlmanac
   GPSAlmanac()
       : lastPage(0)
       , totalPages(0)
-      , processedPages(0){};
+      , processedPages(0)
+  {
+  }
 
   // mapped by prn
   std::vector<GPSSatellite> satellites;
