@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <nmeaparse/nmea.h>
+#include <nematode/nmea.h>
 
 
 
@@ -21,7 +21,7 @@ int main(int argc, char** argv){
 	// --------------------------------------------------------
 	// ------------  CONFIGURE GPS SERVICE  -------------------
 	// --------------------------------------------------------
-	
+
 	// Create a GPS service that will keep track of the fix data.
 	NMEAParser parser;
 	GPSService gps(parser);
@@ -73,7 +73,7 @@ int main(int argc, char** argv){
 		while ( getline(file, line) ){
 			try {
 				parser.readLine(line);
-			}			
+			}
 			catch (NMEAParseError& e){
 				cout << e.message << endl << endl;
 				// You can keep feeding data to the gps service...
@@ -99,7 +99,7 @@ int main(int argc, char** argv){
 	// ---------------   NMEA ALTERNATIVE SENTENCES  ----------
 	// --------------------------------------------------------
 	// Not using GPS NMEA Sentences? That's A-OK.
-	// While there is no data aggregation code written here for 
+	// While there is no data aggregation code written here for
 	// non-GPS use, the parser will still make your job easier.
 	// Extract only the sentences you care about.
 
@@ -175,7 +175,7 @@ int main(int argc, char** argv){
 	NMEAParser test_parser;
 	test_parser.onSentence += [&cmd1, &cmd2, &cmd3, &cmd4](const NMEASentence& n){
 		cout << "Received:  " << n.text;
-		
+
 		if (!n.checksumOK()){
 			cout << "\t\tChecksum FAIL!" << endl;
 		}
