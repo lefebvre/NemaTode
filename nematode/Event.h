@@ -119,7 +119,7 @@ class Event<void(Args...)>
     {
       handlers = ref.handlers;
     }
-  };
+  }
 
   bool removeHandler(ListIterator handlerIter)
   {
@@ -130,7 +130,7 @@ class Event<void(Args...)>
 
     handlers.erase(handlerIter);
     return true;
-  };
+  }
 
  public:
   // Typenames
@@ -198,7 +198,7 @@ class Event<void(Args...)>
     bool sts          = removeHandler(handler._iterator);
     handler._iterator = handlers.end();
     return sts;
-  };
+  }
 
   void clear()
   {
@@ -207,28 +207,28 @@ class Event<void(Args...)>
       (*h)._iterator = handlers.end();
     }
     handlers.clear();
-  };
+  }
 
-  void operator()(Args... args) { return call(args...); };
+  void operator()(Args... args) { return call(args...); }
   EventHandler<void(Args...)> operator+=(EventHandler<void(Args...)> handler)
   {
     return registerHandler(handler);
-  };
+  }
   EventHandler<void(Args...)> operator+=(std::function<void(Args...)> handler)
   {
     return registerHandler(handler);
-  };
+  }
   bool operator-=(EventHandler<void(Args...)>& handler)
   {
     return removeHandler(handler);
-  };
+  }
   bool operator-=(uint64_t handlerID) { return removeHandler(handlerID); };
 
   EventHandler<void(Args...)>& operator=(const EventHandler<void(Args...)>& ref)
   {
     _copy(ref);
     return *this;
-  };
+  }
 };
 
 }  // namespace nmea
