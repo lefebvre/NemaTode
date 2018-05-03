@@ -14,9 +14,9 @@
 using namespace std;
 using namespace nmea;
 
-NMEACommand::NMEACommand(){};
+NMEACommand::NMEACommand() {}
 
-NMEACommand::~NMEACommand(){};
+NMEACommand::~NMEACommand() {}
 
 string NMEACommand::toString() { return addChecksum(message); }
 
@@ -33,7 +33,7 @@ string NMEACommand::addChecksum(std::string s)
   ss.flags(oldflags);  // reset
 
   return ss.str();
-};
+}
 
 /*
 // $PSRF100,0,9600,8,1,0*0C

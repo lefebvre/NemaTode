@@ -61,14 +61,14 @@ class EventHandler<void(Args...)>
   // Functions
   EventHandler(std::function<void(Args...)> h)
       : _iterator()
-      , handler(h)
       , ID(++LastID)
+      , handler(h)
   {
   }
 
   EventHandler(const EventHandler& ref) { _copy(ref); }
 
-  virtual ~EventHandler(){};
+  virtual ~EventHandler() {}
 
   EventHandler& operator=(const EventHandler& ref)
   {

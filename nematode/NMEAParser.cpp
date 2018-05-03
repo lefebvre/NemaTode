@@ -38,8 +38,8 @@ std::string NMEAParseError::what() { return message; }
 NMEASentence::NMEASentence()
     : isvalid(false)
     , checksumIsCalculated(false)
-    , calculatedChecksum(0)
     , parsedChecksum(0)
+    , calculatedChecksum(0)
 {
 }
 
@@ -104,9 +104,9 @@ void trim(string& str)
 // --------- NMEA PARSER --------------
 
 NMEAParser::NMEAParser()
-    : log(false)
+    : fillingbuffer(false)
     , maxbuffersize(NMEA_PARSER_MAX_BUFFER_SIZE)
-    , fillingbuffer(false)
+    , log(false)
 {
 }
 
@@ -459,8 +459,8 @@ void NMEAParser::parseText(NMEASentence& nmea, string txt)
     }
 
     // cout << "NMEA parser Warning: extra comma at end of sentence, but no
-    // information...?" << endl;		// it's actually standard, if checksum is
-    // disabled
+    // information...?" << endl;		// it's actually standard, if checksum
+    // is disabled
     nmea.parameters.push_back("");
 
     stringstream sz;
