@@ -46,11 +46,3 @@ int64_t parseInt(std::string s, int radix)
 }
 
 }  // namespace nmea
-
-/*
-#include <iostream>
-void NumberConversion_test(){
-
-
- }
- */
