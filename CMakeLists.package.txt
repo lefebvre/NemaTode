@@ -1,4 +1,4 @@
-TRIBITS_PACKAGE(nematode)
+TRIBITS_PACKAGE(NemaTode)
 SET(SOURCE
 nematode/GPSFix.cpp
 nematode/GPSService.cpp

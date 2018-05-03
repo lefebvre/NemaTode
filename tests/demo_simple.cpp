@@ -2,11 +2,11 @@
  *
  *  See the license file included with this source.
  */
- 
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <nmeaparse/nmea.h>
+#include <nematode/nmea.h>
 
 
 
@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 	NMEAParser parser;
 	GPSService gps(parser);
 	parser.log = false;
-	
+
 	cout << "Fix  Sats  Sig\t\tSpeed    Dir  Lat         , Lon           Accuracy" << endl;
 	// Handle any changes to the GPS Fix... This is called whenever it's updated.
 	gps.onUpdate += [&gps](){
@@ -61,7 +61,7 @@ int main(int argc, char** argv){
 			// The previous data is ignored and the parser is reset.
 		}
 	}
-		
+
 
 	// Show the final fix information
 	cout << gps.fix.toString() << endl;

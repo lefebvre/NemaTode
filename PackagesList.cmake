@@ -13,7 +13,7 @@
 TRIBITS_REPOSITORY_DEFINE_PACKAGES(
   googletest    googletest/googletest ST
   testframework testframework         ST
-  nematode      .                     PT
+  NemaTode      .                     PT
 )
 
 TRIBITS_ALLOW_MISSING_EXTERNAL_PACKAGES(
