@@ -64,7 +64,7 @@ double GPSAlmanac::percentComplete()
     return 0.0;
   }
 
-  return ((double)processedPages) / ((double)totalPages) * 100.0;
+  return double(processedPages) / double(totalPages) * 100.0;
 }
 double GPSAlmanac::averageSNR()
 {
@@ -384,9 +384,9 @@ std::string GPSFix::toString()
      << timestamp.rawDate << " date)" << endl
      << "   Raw Status:         " << status << "  ("
      << fixStatusToString(status) << ")" << endl
-     << "   Type:               " << (int)type << "  (" << fixTypeToString(type)
+     << "   Type:               " << int(type) << "  (" << fixTypeToString(type)
      << ")" << endl
-     << "   Quality:            " << (int)quality << "  ("
+     << "   Quality:            " << int(quality) << "  ("
      << fixQualityToString(quality) << ")" << endl
      << "   Lat/Lon (N,E):      " << setprecision(6) << fixed << latitude
      << "' N, " << longitude << "' E" << endl;
