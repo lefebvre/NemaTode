@@ -153,10 +153,10 @@ class GPSFix
   int32_t trackingSatellites;
   int32_t visibleSatellites;
 
-  bool locked();
+  bool locked() const;
   double horizontalAccuracy();
   double verticalAccuracy();
-  bool hasEstimate();
+  bool hasEstimate() const;
 
   std::chrono::seconds timeSinceLastUpdate();  // Returns seconds difference
                                                // from last timestamp and right

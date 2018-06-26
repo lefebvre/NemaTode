@@ -261,7 +261,7 @@ seconds GPSFix::timeSinceLastUpdate()
   return seconds((uint64_t)secs);
 }
 
-bool GPSFix::hasEstimate()
+bool GPSFix::hasEstimate() const
 {
   return (latitude != 0 && longitude != 0) || (quality == 6);
 }
@@ -276,7 +276,7 @@ bool GPSFix::setlock(bool locked)
   return false;
 }
 
-bool GPSFix::locked() { return haslock; }
+bool GPSFix::locked() const { return haslock; }
 
 // Returns meters
 double GPSFix::horizontalAccuracy()
