@@ -8,6 +8,7 @@
  */
 
 #include <nematode/GPSFix.h>
+#include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
@@ -167,14 +168,13 @@ std::string GPSTimestamp::monthName(uint32_t index)
 // Returns seconds since Jan 1, 1970. Classic Epoch time.
 time_t GPSTimestamp::getTime()
 {
-  struct tm t = {0};
-  t.tm_year   = year - 1900;  // This is year-1900, so 112 = 2012
-  t.tm_mon    = month - 1;    // month from 0:Jan
-  t.tm_mday   = day;
-  t.tm_hour   = hour;
-  t.tm_min    = min;
-  t.tm_sec    = (int)sec;
-  return mktime(&t);
+  // calculate time_t time since epoc
+  auto timev = std::chrono::years(year - 1970) +
+               std::chrono::months(month - 1) + std::chrono::days(day) +
+               std::chrono::hours(hour) + std::chrono::minutes(min) +
+               std::chrono::seconds(int(sec));
+
+  return timev.count();
 }
 
 void GPSTimestamp::setTime(double raw_ts)
@@ -246,19 +246,17 @@ GPSFix::~GPSFix()
 // Returns the duration since the Host has received information
 seconds GPSFix::timeSinceLastUpdate()
 {
-  time_t now      = time(NULL);
-  struct tm stamp = {0};
+  auto time1 =
+      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
-  stamp.tm_hour = timestamp.hour;
-  stamp.tm_min  = timestamp.min;
-  stamp.tm_sec  = (int)timestamp.sec;
-  stamp.tm_year = timestamp.year - 1900;
-  stamp.tm_mon  = timestamp.month - 1;
-  stamp.tm_mday = timestamp.day;
-
-  time_t then   = mktime(&stamp);
-  uint64_t secs = (uint64_t)difftime(now, then);
-  return seconds((uint64_t)secs);
+  auto time2 = std::chrono::years(timestamp.year - 1970) +
+               std::chrono::months(timestamp.month - 1) +
+               std::chrono::days(timestamp.day) +
+               std::chrono::hours(timestamp.hour) +
+               std::chrono::minutes(timestamp.min) +
+               std::chrono::seconds(int(timestamp.sec));
+  auto diff = time1 - time2.count();
+  return seconds(diff);
 }
 
 bool GPSFix::hasEstimate() const
