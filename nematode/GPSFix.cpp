@@ -249,16 +249,11 @@ GPSFix::~GPSFix()
 // Returns the duration since the Host has received information
 milliseconds GPSFix::timeSinceLastUpdate()
 {
-  auto time1 = std::chrono::gps_clock::now();
+  auto time1 = std::chrono::system_clock::now();
 
-  // GPS epoch is 1980-01-06 00:00:00.00000
-  milliseconds time2 = std::chrono::years(timestamp.year - 1980) +
-                       std::chrono::months(timestamp.month - 1) +
-                       std::chrono::days(timestamp.day - 6) +
-                       std::chrono::hours(timestamp.hour) +
-                       std::chrono::minutes(timestamp.min) +
-                       std::chrono::milliseconds(int(timestamp.sec * 1e3));
-  auto diff = time1.time_since_epoch().count() - time2.count();
+  auto time2 = timestamp.getTime();
+  auto diff =
+      time1.time_since_epoch().count() - time2.time_since_epoch().count();
   return milliseconds(diff);
 }
 
