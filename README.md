@@ -241,7 +241,7 @@ All data is checked for consistency. For example, visible satellites can never b
     int32_t 	year;
     double 		rawTime;	// Values collected directly from the GPS
     int32_t 	rawDate;
-    std::chrono::milliseconds 		getTime();	// Converts timestamp into GPS Epoch time, milliseconds since 1/6/1980.
+    std::chrono::sys_time<std::chrono::milliseconds> 		getTime();	// Converts timestamp into Epoch time, milliseconds since 1/1/1970.
 
 
 # NemaTode?
