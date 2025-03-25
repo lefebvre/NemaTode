@@ -8,6 +8,7 @@
  */
 
 #include <nematode/GPSFix.h>
+#include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
@@ -164,17 +165,19 @@ std::string GPSTimestamp::monthName(uint32_t index)
   return names[index - 1];
 }
 
-// Returns seconds since Jan 1, 1970. Classic Epoch time.
-time_t GPSTimestamp::getTime()
+// Returns seconds since Jan 6, 1980. GPS Epoch time.
+sys_time<milliseconds> GPSTimestamp::getTime()
 {
-  struct tm t = {0};
-  t.tm_year   = year - 1900;  // This is year-1900, so 112 = 2012
-  t.tm_mon    = month - 1;    // month from 0:Jan
-  t.tm_mday   = day;
-  t.tm_hour   = hour;
-  t.tm_min    = min;
-  t.tm_sec    = (int)sec;
-  return mktime(&t);
+  constexpr days gps_epoch_offset(
+      days(3657));  // days from 1970-01-01 to 1980-01-06
+  milliseconds gps_duration =
+      sys_days{year_month_day(std::chrono::year(year),
+                              std::chrono::month(month), std::chrono::day(day))}
+          .time_since_epoch() -
+      gps_epoch_offset + hours(hour) + minutes(min) +
+      duration_cast<milliseconds>(duration<double>(sec));
+  gps_time<milliseconds> gps_tp(gps_duration);
+  return clock_cast<system_clock>(gps_tp);
 }
 
 void GPSTimestamp::setTime(double raw_ts)
@@ -244,21 +247,13 @@ GPSFix::~GPSFix()
 }
 
 // Returns the duration since the Host has received information
-seconds GPSFix::timeSinceLastUpdate()
+milliseconds GPSFix::timeSinceLastUpdate()
 {
-  time_t now      = time(NULL);
-  struct tm stamp = {0};
+  auto time1 = std::chrono::system_clock::now();
 
-  stamp.tm_hour = timestamp.hour;
-  stamp.tm_min  = timestamp.min;
-  stamp.tm_sec  = (int)timestamp.sec;
-  stamp.tm_year = timestamp.year - 1900;
-  stamp.tm_mon  = timestamp.month - 1;
-  stamp.tm_mday = timestamp.day;
+  auto time2 = timestamp.getTime();
 
-  time_t then   = mktime(&stamp);
-  uint64_t secs = (uint64_t)difftime(now, then);
-  return seconds((uint64_t)secs);
+  return duration_cast<milliseconds>(time1 - time2);
 }
 
 bool GPSFix::hasEstimate() const
