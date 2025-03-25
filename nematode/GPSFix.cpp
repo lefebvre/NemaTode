@@ -252,9 +252,8 @@ milliseconds GPSFix::timeSinceLastUpdate()
   auto time1 = std::chrono::system_clock::now();
 
   auto time2 = timestamp.getTime();
-  auto diff =
-      time1.time_since_epoch().count() - time2.time_since_epoch().count();
-  return milliseconds(diff);
+
+  return duration_cast<milliseconds>(time1 - time2);
 }
 
 bool GPSFix::hasEstimate() const
