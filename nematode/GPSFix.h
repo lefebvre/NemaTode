@@ -100,7 +100,7 @@ class GPSTimestamp
   double rawTime;
   int32_t rawDate;
 
-  std::chrono::milliseconds getTime();
+  std::chrono::sys_time<std::chrono::milliseconds> getTime();
 
   // Set directly from the NMEA time stamp
   // hhmmss.sss
