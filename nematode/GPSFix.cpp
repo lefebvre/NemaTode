@@ -168,7 +168,7 @@ std::string GPSTimestamp::monthName(uint32_t index)
 // Returns seconds since Jan 6, 1980. GPS Epoch time.
 milliseconds GPSTimestamp::getTime()
 {
-  // calculate time_t time since gps epoc
+  // calculate milliseconds time since gps epoc
   auto timev = years(year - 1980) + months(month - 1) + days(day - 6) +
                hours(hour) + minutes(min) + milliseconds(int(sec * 1e3));
 
