@@ -165,16 +165,14 @@ std::string GPSTimestamp::monthName(uint32_t index)
   return names[index - 1];
 }
 
-// Returns seconds since Jan 1, 1970. Classic Epoch time.
-time_t GPSTimestamp::getTime()
+// Returns seconds since Jan 6, 1980. GPS Epoch time.
+milliseconds GPSTimestamp::getTime()
 {
-  // calculate time_t time since epoc
-  auto timev = std::chrono::years(year - 1970) +
-               std::chrono::months(month - 1) + std::chrono::days(day) +
-               std::chrono::hours(hour) + std::chrono::minutes(min) +
-               std::chrono::seconds(int(sec));
+  // calculate time_t time since gps epoc
+  auto timev = years(year - 1980) + months(month - 1) + days(day - 6) +
+               hours(hour) + minutes(min) + milliseconds(int(sec * 1e3));
 
-  return timev.count();
+  return timev;
 }
 
 void GPSTimestamp::setTime(double raw_ts)
@@ -244,19 +242,19 @@ GPSFix::~GPSFix()
 }
 
 // Returns the duration since the Host has received information
-seconds GPSFix::timeSinceLastUpdate()
+milliseconds GPSFix::timeSinceLastUpdate()
 {
-  auto time1 =
-      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  auto time1 = std::chrono::gps_clock::now();
 
-  auto time2 = std::chrono::years(timestamp.year - 1970) +
-               std::chrono::months(timestamp.month - 1) +
-               std::chrono::days(timestamp.day) +
-               std::chrono::hours(timestamp.hour) +
-               std::chrono::minutes(timestamp.min) +
-               std::chrono::seconds(int(timestamp.sec));
-  auto diff = time1 - time2.count();
-  return seconds(diff);
+  // GPS epoch is 1980-01-06 00:00:00.00000
+  milliseconds time2 = std::chrono::years(timestamp.year - 1980) +
+                       std::chrono::months(timestamp.month - 1) +
+                       std::chrono::days(timestamp.day - 6) +
+                       std::chrono::hours(timestamp.hour) +
+                       std::chrono::minutes(timestamp.min) +
+                       std::chrono::milliseconds(int(timestamp.sec * 1e3));
+  auto diff = time1.time_since_epoch().count() - time2.count();
+  return milliseconds(diff);
 }
 
 bool GPSFix::hasEstimate() const

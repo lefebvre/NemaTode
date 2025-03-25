@@ -211,7 +211,7 @@ All data is checked for consistency. For example, visible satellites can never b
     double 		verticalAccuracy();
     bool 		hasEstimate();		// If no fix is available, this says the position data is close to a real fix.
 
-    std::chrono::seconds timeSinceLastUpdate();	// Returns time from last timestamp to right now, in seconds.
+    std::chrono::milliseconds timeSinceLastUpdate();	// Returns time from last timestamp to right now, in milliseconds.
 
 
 **GPSSatellite**
@@ -241,7 +241,7 @@ All data is checked for consistency. For example, visible satellites can never b
     int32_t 	year;
     double 		rawTime;	// Values collected directly from the GPS
     int32_t 	rawDate;
-    time_t 		getTime();	// Converts timestamp into Epoch time, seconds since 1/1/1970.
+    std::chrono::milliseconds 		getTime();	// Converts timestamp into GPS Epoch time, milliseconds since 1/6/1980.
 
 
 # NemaTode?

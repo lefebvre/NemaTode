@@ -35,7 +35,7 @@ class GPSSatellite
       : snr(0)
       , prn(0)
       , elevation(0)
-      , azimuth(0){};
+      , azimuth(0) {};
 
   // satellite data
   double snr;        // 0-99 dB
@@ -100,7 +100,7 @@ class GPSTimestamp
   double rawTime;
   int32_t rawDate;
 
-  time_t getTime();
+  std::chrono::milliseconds getTime();
 
   // Set directly from the NMEA time stamp
   // hhmmss.sss
@@ -160,9 +160,9 @@ class GPSFix
   double verticalAccuracy();
   bool hasEstimate() const;
 
-  std::chrono::seconds timeSinceLastUpdate();  // Returns seconds difference
-                                               // from last timestamp and right
-                                               // now.
+  std::chrono::milliseconds timeSinceLastUpdate();  // Returns milliseconds
+                                                    // difference from last
+                                                    // timestamp and right now.
 
   std::string toString();
   operator std::string();
